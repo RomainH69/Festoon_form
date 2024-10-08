@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Guirlande de Câbles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+		
+		h2 {
+            margin-top: 20px;
+            color: #444;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+		}
+        form {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        label {
+            font-weight: bold;
+			margin: 15px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+        }
+
+        .svg-text {
+            fill: black;
+            font-size: 14px;
+        }
+
+        .svg-vertical-text {
+            fill: black;
+            font-size: 14px;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            text-anchor: middle;
+        }
+		
+		input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="radio"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="radio"] {
+            width: auto;
+        }
+		
+		input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+		
+		table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+		
+		 table th {
+            background-color: #f4f4f9;
+        }
+
+        .add-row {
+            background-color: #007bff;
+            color: white;
+            padding: 8px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+		
+		.remove-row {
+            background-color: #dc3545;
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<script>
+// Ce code s'exécutera une fois le DOM entièrement chargé
+        document.addEventListener('DOMContentLoaded', function() {
+            const ambianceRadios = document.querySelectorAll('input[name="ambiance"]');
+            const ambianceDetails = document.getElementById('ambianceDetails');
+			if(ambianceRadios){
+				ambianceRadios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'Oui') {
+                        ambianceDetails.style.display = 'block'; // Affiche le champ de précision
+                    } else {
+                        ambianceDetails.style.display = 'none';  // Cache le champ de précision
+                    }
+                });
+            });
+			}
+        });
+</script>
+<body>
+
+<h1>Formulaire Guirlande de Câbles</h1>
+
+<form id="guirlandeForm" action="http://localhost:3000/send-email" method="POST">
+
+	<h2>Contact</h2>
+        <div class="form-group">
+            <label for="nom">Nom *</label>
+            <input type="text" id="nom" name="nom" required>
+        </div>
+
+        <div class="form-group">
+            <label for="prenom">Prénom *</label>
+            <input type="text" id="prenom" name="prenom" required>
+        </div>
+
+        <div class="form-group">
+            <label for="mail">Mail *</label>
+            <input type="email" id="mail" name="mail" required>
+        </div>
+		
+		<div class="form-group">
+            <label for="societe">Societé *</label>
+            <input type="text" id="societe" name="societe" required>
+        </div>
+		
+		<h2>Environnement</h2>
+        <div class="form-group radio-group">
+            <label>Environnement *</label><br>
+            <input type="radio" id="interieur" name="environnement" value="Intérieur" required>
+            <label for="interieur">Intérieur</label>
+
+            <input type="radio" id="exterieur" name="environnement" value="Extérieur" required>
+            <label for="exterieur">Extérieur</label>
+        </div>
+		
+		<h2>Ambiance agressive</h2>
+        <div class="form-group radio-group">
+            <label>Ambiance agressive ? *</label><br>
+            <input type="radio" id="oui" name="ambiance" value="Oui" required>
+            <label for="oui">Oui</label>
+
+            <input type="radio" id="non" name="ambiance" value="Non" required>
+            <label for="non">Non</label>
+        </div>
+		
+		<div id="ambianceDetails" style="display: none;">
+			<label for="preciseAmbiance">Veuillez préciser l'ambiance agressive :</label>
+			<input type="text" id="preciseAmbiance" name="preciseAmbiance" placeholder="Préciser...">
+		</div>
+		
+		<h2>Dimensionnement</h2>
+		
+		<div class="form-group">
+            <label for="vitesse">Vitesse (m/s) *</label>
+            <input type="number" id="vitesse" name="vitesse" step="0.01" required>
+        </div>
+
+    <label for="course">Course (S en mètres)</label>
+    <input type="number" id="course" name="course" step="0.01" placeholder="Entrer la course (S)">
+
+    <label for="sp">Voie de garage (SP en mètres)</label>
+    <input type="number" id="sp" name="sp" step="0.01" placeholder="Entrer la voie de garage (SP)">
+
+    <label for="dh">Hauteur de boucle (DH en mètres)</label>
+    <input type="number" id="dh" name="dh" step="0.01" placeholder="Entrer la hauteur de boucle (DH)">
+
+    <label for="totalLength">Longueur totale (mètres)</label>
+    <input type="number" id="totalLength" name="totalLength" step="0.01" placeholder="Entrer la longueur totale">
+
+    <div>
+        <!-- Schéma SVG -->
+        <svg id="schema" viewBox="0 0 1000 400">
+            <!-- Barre horizontale -->
+            <rect x="100" y="100" width="800" height="30" fill="none" stroke="black" stroke-width="2" />
+
+            <!-- Boucles serrées et plus à gauche -->
+            <path d="M120,130 C120,320 170,320 170,130 
+                     M180,130 C180,320 230,320 230,130 
+                     M240,130 C240,320 290,320 290,130" stroke="black" fill="none" stroke-width="2" />
+
+            <!-- Cotes : Course (S) -->
+            <line id="line-course" x1="290" y1="80" x2="900" y2="80" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+            <text id="text-course" x="600" y="70" class="svg-text" text-anchor="middle">Course (S) : 0 m</text>
+
+            <!-- Cotes : Voie de garage (SP) à gauche -->
+            <line id="line-sp" x1="120" y1="80" x2="300" y2="80" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+            <text id="text-sp" x="180" y="70" class="svg-text" text-anchor="middle">Voie de garage (SP) : 0 m</text>
+
+            <!-- Cotes : Hauteur de boucle (DH) -->
+            <line id="line-dh" x1="100" y1="130" x2="100" y2="260" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+            <text id="text-dh" x="80" y="120" style="writing-mode: tb; glyph-orientation-vertical: 90;">Hauteur (DH)</text>
+
+            <!-- Cotes : Longueur totale (S + SP + sécurité) -->
+            <line id="line-total" x1="100" y1="50" x2="900" y2="50" stroke="black" stroke-width="2" marker-end="url(#arrow)" />
+            <text id="text-total-length" x="500" y="40" class="svg-text" text-anchor="middle">Longueur totale : 0 m</text>
+
+            <!-- Arrow definitions for the diagram -->
+            <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                    <path d="M0,0 L10,5 L0,10 z" fill="black" />
+                </marker>
+            </defs>
+        </svg>
+    </div>
+	
+	<h2>Câbles</h2>
+        <table id="cableTable">
+            <thead>
+                <tr>
+                    <th>Quantité</th>
+                    <th>Nombre de pôles x section</th>
+                    <th>Forme</th>
+					<th>Fourniture</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+			<tr>
+                    <td><input type="number" name="quantite[]" required></td>
+                    <td><input type="text" name="nbPoles[]" required></td>
+                    <td><select name="forme[]" required>
+                        <option value="plat">Plat</option>
+                        <option value="rond">Rond</option>
+                    </select></td>
+					 <td>
+						<select name="fourniture[]" required> <!-- Sélection Fourniture -->
+						<option value="Client">Client</option>
+						<option value="Vahle">Vahle</option>
+						</select>
+					</td>
+                    <td><button type="button" class="remove-row">Supprimer</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="add-row">Ajouter une ligne</button>
+
+        <div class="form-group">
+            <label for="surlongueur">Surlongueur de câble (m) *</label>
+            <input type="number" id="surlongueur" name="surlongueur" required>
+        </div>
+
+    <input type="submit" value="Envoyer">
+</form>
+
+
+
+<script>
+
+	
+
+    function updateSchemaText() {
+        let course = parseFloat(document.getElementById("course").value) || 0;
+        let sp = parseFloat(document.getElementById("sp").value) || 0;
+        let dh = parseFloat(document.getElementById("dh").value) || 0;
+        let totalLength = parseFloat(document.getElementById("totalLength").value) || 0;
+
+        // Longueur de sécurité fixée à 0.2 m de chaque côté
+        let sec = 0.2;
+
+        if (totalLength !== 0) {
+            let totalWithoutSecurity = totalLength - 2 * sec;
+            if (course !== 0 && sp !== 0) {
+                totalLength = course + sp + 2 * sec;
+            }
+        }
+		if (totalLength == 0 && course !== 0 && sp !== 0) {
+			totalLength = course + sp + 2 * sec;
+			}
+			
+		if (totalLength !== 0 && course == 0 && sp !== 0){
+			course = totalLength - sp - 2*sec;
+			}
+			
+		if (totalLength !== 0 && course !== 0 && sp == 0){
+			sp = totalLength - course - 2*sec;
+			}	
+			
+
+        // Mise à jour des textes
+        document.getElementById("text-course").textContent = `Course (S) : ${course.toFixed(2)} m`;
+        document.getElementById("text-sp").textContent = `Voie de garage (SP) : ${sp.toFixed(2)} m`;
+        document.getElementById("text-dh").textContent = `Hauteur (DH) : ${dh.toFixed(2)} m`;
+        document.getElementById("text-total-length").textContent = `Longueur totale : ${totalLength.toFixed(2)} m`;
+
+        // Les longueurs des flèches restent fixes
+        document.getElementById("line-course").setAttribute("x2", "860");
+        document.getElementById("line-sp").setAttribute("x2", "290");
+    }
+
+    // Mise à jour des valeurs du schéma
+    document.getElementById("course").addEventListener("input", updateSchemaText);
+    document.getElementById("sp").addEventListener("input", updateSchemaText);
+    document.getElementById("dh").addEventListener("input", updateSchemaText);
+    document.getElementById("totalLength").addEventListener("input", updateSchemaText);
+
+    // Initialisation
+    updateSchemaText();
+	
+	
+	
+	
+</script>
+
+
+
+ <script>
+        document.querySelector('.add-row').addEventListener('click', function() {
+            const tableBody = document.querySelector('#cableTable tbody');
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+                <td><input type="number" name="quantite[]" required></td>
+                <td><input type="text" name="nbPoles[]" required></td>
+                <td><select name="forme[]" required>
+                        <option value="plat">Plat</option>
+                        <option value="rond">Rond</option>
+                    </select></td>
+				 <td>
+					<select name="fourniture[]" required> <!-- Sélection Fourniture -->
+                    <option value="Client">Client</option>
+                    <option value="Vahle">Vahle</option>
+					</select>
+				</td>
+                <td><button type="button" class="remove-row">Supprimer</button></td>
+            `;
+            
+			tableBody.appendChild(newRow);
+
+            // Ajouter l'événement pour supprimer la ligne
+            newRow.querySelector('.remove-row').addEventListener('click', function() {
+                newRow.remove();
+            });
+  });
+
+        // Écouter les clics sur les boutons "Supprimer"
+        document.querySelectorAll('.remove-row').forEach(button => {
+            button.addEventListener('click', function() {
+                button.closest('tr').remove();
+            });
+        });
+
+        // Validation et soumission du formulaire
+        document.getElementById("guirlandeForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            
+            // Récupération des données du formulaire
+            const formData = new FormData(this);
+			
+         // Formatage des câbles sous forme d'objets
+    let cables = [];
+    const quantite = formData.getAll('quantite[]');
+    const nbPoles = formData.getAll('nbPoles[]');
+    const forme = formData.getAll('forme[]');
+    const fourniture = formData.getAll('fourniture[]');
+
+    for (let i = 0; i < quantite.length; i++) {
+        cables.push({
+            quantite: quantite[i],
+            nbPoles: nbPoles[i],
+            forme: forme[i],
+            fourniture: fourniture[i]
+        });
+    }
+	
+	 // Convertit les données en JSON
+    const data = {
+        nom: formData.get('nom'),
+        prenom: formData.get('prenom'),
+        mail: formData.get('mail'),
+		societe: formData.get('societe'),
+        environnement: formData.get('environnement'),
+        ambiance: formData.get('ambiance'),
+		preciseAmbiance: formData.get('preciseAmbiance'),
+        vitesse: formData.get('vitesse'),
+        course: formData.get('course'),
+        sp: formData.get('sp'),
+        dh: formData.get('dh'),
+        totalLength: formData.get('totalLength'),
+        cables: cables
+    };
+		
+		
+		// Envoie des données au serveur
+    fetch('http://localhost:3000/send-email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        alert('Formulaire envoyé avec succès !');
+    })
+    .catch(error => console.error('Erreur:', error));
+});
+            
+    </script>
+	
+</body>
+
+
+</html>

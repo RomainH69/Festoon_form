@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire Guirlande</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #444;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="radio"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="radio"] {
+            width: auto;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #f4f4f9;
+        }
+
+        .add-row {
+            background-color: #007bff;
+            color: white;
+            padding: 8px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+
+        .remove-row {
+            background-color: #dc3545;
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Questionnaire Guirlande</h1>
+
+    <form id="guirlandeForm">
+        <h2>Contact</h2>
+        <div class="form-group">
+            <label for="nom">Nom *</label>
+            <input type="text" id="nom" name="nom" required>
+        </div>
+
+        <div class="form-group">
+            <label for="prenom">Prénom *</label>
+            <input type="text" id="prenom" name="prenom" required>
+        </div>
+
+        <div class="form-group">
+            <label for="mail">Mail *</label>
+            <input type="email" id="mail" name="mail" required>
+        </div>
+
+        <h2>Environnement</h2>
+        <div class="form-group radio-group">
+            <label>Environnement *</label><br>
+            <input type="radio" id="interieur" name="environnement" value="Intérieur" required>
+            <label for="interieur">Intérieur</label>
+
+            <input type="radio" id="exterieur" name="environnement" value="Extérieur" required>
+            <label for="exterieur">Extérieur</label>
+        </div>
+
+        <h2>Ambiance agressive</h2>
+        <div class="form-group radio-group">
+            <label>Ambiance agressive ? *</label><br>
+            <input type="radio" id="oui" name="ambiance" value="Oui" required>
+            <label for="oui">Oui</label>
+
+            <input type="radio" id="non" name="ambiance" value="Non" required>
+            <label for="non">Non</label>
+        </div>
+
+        <h2>Dimensionnement</h2>
+        <div class="form-group">
+            <label for="course">Course (m) *</label>
+            <input type="number" id="course" name="course" required>
+        </div>
+
+        <div class="form-group">
+            <label for="longueurTotal">Longueur total (m) *</label>
+            <input type="number" id="longueurTotal" name="longueurTotal" required>
+        </div>
+
+        <div class="form-group">
+            <label for="hauteur">Hauteur (m) *</label>
+            <input type="number" id="hauteur" name="hauteur" required>
+        </div>
+
+        <div class="form-group">
+            <label for="garage">Garage (m) *</label>
+            <input type="number" id="garage" name="garage" required>
+        </div>
+
+        <div class="form-group">
+            <label for="vitesse">Vitesse (m/s) *</label>
+            <input type="number" id="vitesse" name="vitesse" step="0.01" required>
+        </div>
+
+        <h2>Câbles</h2>
+        <table id="cableTable">
+            <thead>
+                <tr>
+                    <th>Quantité</th>
+                    <th>Nombre de pôles x section</th>
+                    <th>Plat/Rond</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="number" name="quantite[]" required></td>
+                    <td><input type="text" name="nbPoles[]" required></td>
+                    <td><input type="text" name="platRond[]" required></td>
+                    <td><button type="button" class="remove-row">Supprimer</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="add-row">Ajouter une ligne</button>
+
+        <div class="form-group">
+            <label for="surlongueur">Surlongueur de câble (m) *</label>
+            <input type="number" id="surlongueur" name="surlongueur" required>
+        </div>
+
+        <input type="submit" value="Envoyer">
+    </form>
+
+    <script>
+        document.querySelector('.add-row').addEventListener('click', function() {
+            const tableBody = document.querySelector('#cableTable tbody');
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+                <td><input type="number" name="quantite[]" required></td>
+                <td><input type="text" name="nbPoles[]" required></td>
+                <td><input type="text" name="platRond[]" required></td>
+                <td><button type="button" class="remove-row">Supprimer</button></td>
+            `;
+            tableBody.appendChild(newRow);
+
+            // Ajouter l'événement pour supprimer la ligne
+            newRow.querySelector('.remove-row').addEventListener('click', function() {
+                newRow.remove();
+            });
+        });
+
+        // Écouter les clics sur les boutons "Supprimer"
+        document.querySelectorAll('.remove-row').forEach(button => {
+            button.addEventListener('click', function() {
+                button.closest('tr').remove();
+            });
+        });
+
+        document.getElementById('guirlandeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            let data = {};
+            formData.forEach((value, key) => {
+                if (!data[key]) {
+                    data[key] = value;
+                } else {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
+                }
+            });
+
+            // Convert the data to JSON format
+            let jsonData = JSON.stringify(data);
+
+            // Use Email API (like SMTP or an integration) to send this data
+            window.location.href = `mailto:tonemail@domaine.com?subject=Formulaire Guirlande&body=${encodeURIComponent(jsonData)}`;
+        });
+    </script>
+</body>
+</html>
