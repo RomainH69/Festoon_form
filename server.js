@@ -126,6 +126,6 @@ app.post('/send-email',  upload.array('fileUpload', 10), (req, res) => {
 
 // Démarrer le serveur
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
     console.log('Serveur en écoute sur le port ${port}');
 });

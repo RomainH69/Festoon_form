@@ -476,7 +476,7 @@
 		
 	
 		// Envoie des données au serveur
-    fetch('http://localhost:3000/send-email', {
+    fetch('http://0.0.0.0:${process.env.PORT}/send-email', {
         method: 'POST',
         headers: {
         },
