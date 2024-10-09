@@ -165,7 +165,7 @@
 
 <h1>Formulaire Guirlande de Câbles</h1>
 
-<form id="guirlandeForm" action="http://localhost:3000/send-email" method="POST">
+<form id="guirlandeForm" enctype="multipart/form-data">
 
 	<h2>Contact</h2>
         <div class="form-group">
@@ -198,7 +198,6 @@
             <label for="exterieur">Extérieur</label>
         </div>
 		
-		<h2>Ambiance agressive</h2>
         <div class="form-group radio-group">
             <label>Ambiance agressive ? *</label><br>
             <input type="radio" id="oui" name="ambiance" value="Oui" required>
@@ -216,7 +215,34 @@
 		<h2>Dimensionnement</h2>
 		
 		<div class="form-group">
-            <label for="vitesse">Vitesse (m/s) *</label>
+			<label for="railType">Type de rail</label>
+			<select id="railType" name="railType">
+				<option value="Rail C">Rail C</option>
+				option value="Rail carré">Rail carré</option>
+				<option value="IPE 80">IPE 80</option>
+				<option value="IPE 100">IPE 100</option>
+				<option value="IPE 120">IPE 120</option>
+				<option value="IPE 140">IPE 140</option>
+				<option value="IPE 160">IPE 160</option>
+				<option value="IPE 180">IPE 180</option>
+				<option value="IPE 200">IPE 200</option>
+				<option value="IPE 220">IPE 220</option>
+				<option value="IPE 240">IPE 240</option>
+				<option value="IPN 80">IPN 80</option>
+				<option value="IPN 100">IPN 100</option>
+				<option value="IPN 120">IPN 120</option>
+				<option value="IPN 140">IPN 140</option>
+				<option value="IPN 160">IPN 160</option>
+				<option value="IPN 180">IPN 180</option>
+				<option value="IPN 200">IPN 200</option>
+				<option value="IPN 220">IPN 220</option>
+				<option value="IPN 240">IPN 240</option>
+			</select>
+
+		</div>
+		
+		<div class="form-group">
+            <label for="vitesse">Vitesse (m/min) *</label>
             <input type="number" id="vitesse" name="vitesse" step="0.01" required>
         </div>
 
@@ -289,8 +315,8 @@
                     </select></td>
 					 <td>
 						<select name="fourniture[]" required> <!-- Sélection Fourniture -->
-						<option value="Client">Client</option>
 						<option value="Vahle">Vahle</option>
+						<option value="Client">Client</option>
 						</select>
 					</td>
                     <td><button type="button" class="remove-row">Supprimer</button></td>
@@ -303,6 +329,14 @@
             <label for="surlongueur">Surlongueur de câble (m) *</label>
             <input type="number" id="surlongueur" name="surlongueur" required>
         </div>
+		
+		<!-- Champ pour les autres informations -->
+		<label for="otherInfo">Autres informations</label>
+		<textarea id="otherInfo" name="otherInfo" rows="4" cols="50" placeholder="Ajoutez des informations supplémentaires ici..."></textarea>
+
+		<!-- Champ pour ajouter des fichiers -->
+		<label for="fileUpload">Ajouter des fichiers</label>
+		<input type="file" id="fileUpload" name="fileUpload" multiple>
 
     <input type="submit" value="Envoyer">
 </form>
@@ -382,8 +416,8 @@
                     </select></td>
 				 <td>
 					<select name="fourniture[]" required> <!-- Sélection Fourniture -->
-                    <option value="Client">Client</option>
                     <option value="Vahle">Vahle</option>
+                    <option value="Client">Client</option>
 					</select>
 				</td>
                 <td><button type="button" class="remove-row">Supprimer</button></td>
@@ -418,14 +452,8 @@
     const forme = formData.getAll('forme[]');
     const fourniture = formData.getAll('fourniture[]');
 
-    for (let i = 0; i < quantite.length; i++) {
-        cables.push({
-            quantite: quantite[i],
-            nbPoles: nbPoles[i],
-            forme: forme[i],
-            fourniture: fourniture[i]
-        });
-    }
+  
+
 	
 	 // Convertit les données en JSON
     const data = {
@@ -436,22 +464,23 @@
         environnement: formData.get('environnement'),
         ambiance: formData.get('ambiance'),
 		preciseAmbiance: formData.get('preciseAmbiance'),
+		railType: formData.get('railType'),
         vitesse: formData.get('vitesse'),
         course: formData.get('course'),
         sp: formData.get('sp'),
         dh: formData.get('dh'),
         totalLength: formData.get('totalLength'),
-        cables: cables
+        cables: cables,
+		otherInfo: formData.get('otherInfo')
     };
 		
-		
+	
 		// Envoie des données au serveur
     fetch('http://localhost:3000/send-email', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: formData
     })
     .then(response => response.json())
     .then(data => {

@@ -3,25 +3,42 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
-
+const multer = require('multer');
+const path = require('path');
 require('dotenv').config();  // Charge les variables d'environnement à partir de .env
 
 const app = express();
 app.use(cors());
 
+const upload = multer({ dest: 'uploads/' }); // Dossier où stocker les fichiers temporairement
+
+
 
 // Middleware pour parser les données du formulaire
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//app.use(express.json());
+//app.use(express.urlencoded({ extended: true }));
 
 // Route POST pour recevoir les données du formulaire
-app.post('/send-email', (req, res) => {
+app.post('/send-email',  upload.array('fileUpload', 10), (req, res) => {
 	
 	const formData = req.body;
-	console.log('Données reçues:', req.body);  // Ajoute ceci pour inspecter les données reçues
+	const files = req.files; // 'files' doit correspondre au champ de fichier
+	console.log('Données reçues:', formData);  // Ajoute ceci pour inspecter les données reçues
 	
-   const { nom, prenom, mail, societe, environnement, ambiance, preciseAmbiance, vitesse, course, sp, dh, totalLength, cables } = req.body;
-   
+   const { nom, prenom, mail, societe, environnement, ambiance, preciseAmbiance, railType, vitesse, course, sp, dh, totalLength, quantite, nbPoles, forme, fourniture, otherInfo } = formData;
+	
+	let cables=[];
+	
+	for (let i = 0; i < quantite.length; i++) {
+        cables.push({
+            quantite: quantite[i],
+            nbPoles: nbPoles[i],
+            forme: forme[i],
+            fourniture: fourniture[i]
+        });
+    }
+	
+	console.log('cables', cables);
     if (!cables || cables.length === 0) {
     return res.status(400).send({ message: "Aucune donnée de câble reçue." });
   }
@@ -32,7 +49,7 @@ app.post('/send-email', (req, res) => {
 		precisions = ``
 	}
 	
-     let emailBody = `
+    let emailBody = `
     <h2>Formulaire Guirlande de Câbles</h2>
     <p><strong>Nom:</strong> ${nom}</p>
     <p><strong>Prénom:</strong> ${prenom}</p>
@@ -41,6 +58,7 @@ app.post('/send-email', (req, res) => {
     <p><strong>Environnement:</strong> ${environnement}</p>
     ${precisions}
 	<p><strong>Ambiance agressive:</strong> ${ambiance}</p>
+	<p><strong>Rail:</strong> ${railType}</p>
     <p><strong>Vitesse:</strong> ${vitesse}</p>
     <p><strong>Course:</strong> ${course}</p>
     <p><strong>SP:</strong> ${sp}</p>
@@ -68,6 +86,7 @@ app.post('/send-email', (req, res) => {
   });
 
   emailBody += `</table>`;
+  emailBody += `<p><strong>Autres infos: </strong>${otherInfo}</p>`
 	
 	// Configuration de Nodemailer avec les variables d'environnement
     const transporter = nodemailer.createTransport({
@@ -79,10 +98,16 @@ app.post('/send-email', (req, res) => {
         }
     });
 
+	
+
     // Définir le contenu de l'email
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: 'romain.hoerdt@vahle.com',
+		attachments: files.map(file => ({
+            filename: file.originalname,
+            path: file.path
+        })), // Ajout des fichiers joints
         subject: 'Nouveau formulaire de guirlande de câbles',
         html: emailBody
 		};
