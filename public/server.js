@@ -9,6 +9,7 @@ require('dotenv').config();  // Charge les variables d'environnement à partir d
 
 const app = express();
 app.use(cors());
+app.use(express.static('public'));
 
 const upload = multer({ dest: 'uploads/' }); // Dossier où stocker les fichiers temporairement
 
